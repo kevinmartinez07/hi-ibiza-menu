@@ -9,3 +9,4 @@ coverage
 .opencode/
 Catalogo/
 ChatGPT Image *.png
+public/images/products/product-*.png
