@@ -1,0 +1,22 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": ["AGENTS.md", "CLAUDE.md"],
+  "default_agent": "build",
+  "agent": {
+    "menu-content": {
+      "description": "Verifies menu data, product fields, prices and asset mappings without editing files.",
+      "mode": "subagent",
+      "permission": { "edit": "deny" }
+    },
+    "menu-qa": {
+      "description": "Checks the menu for responsive, accessibility and interaction regressions.",
+      "mode": "subagent",
+      "permission": { "edit": "deny" }
+    },
+    "frontend-reviewer": {
+      "description": "Reviews frontend changes for architecture, TypeScript and maintainability issues.",
+      "mode": "subagent",
+      "permission": { "edit": "deny" }
+    }
+  }
+}

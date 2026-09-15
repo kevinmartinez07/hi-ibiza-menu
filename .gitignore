@@ -1,0 +1,11 @@
+node_modules
+dist
+coverage
+.env
+.env.*
+!.env.example
+*.local
+.gstack/
+.opencode/
+Catalogo/
+ChatGPT Image *.png
