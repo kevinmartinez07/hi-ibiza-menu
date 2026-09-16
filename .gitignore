@@ -10,3 +10,4 @@ coverage
 Catalogo/
 ChatGPT Image *.png
 public/images/products/product-*.png
+.vercel

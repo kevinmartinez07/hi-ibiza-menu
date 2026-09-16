@@ -3,10 +3,11 @@ import { ProductCard } from '@/components/ProductCard'
 
 type MenuSectionProps = {
   category: MenuCategory
-  products: MenuProduct[]
+  products: readonly MenuProduct[]
+  view?: 'visual' | 'reading'
 }
 
-export function MenuSection({ category, products }: MenuSectionProps) {
+export function MenuSection({ category, products, view = 'visual' }: MenuSectionProps) {
   const featuredProduct = products.find((product) => product.featured)
   const regularProducts = products.filter((product) => !product.featured)
 
@@ -23,10 +24,10 @@ export function MenuSection({ category, products }: MenuSectionProps) {
         <h2 id={`${category.id}-title`}>{category.name}</h2>
         <span className='heading-line' aria-hidden='true' />
       </div>
-      {featuredProduct ? <ProductCard product={featuredProduct} /> : null}
+      {featuredProduct ? <ProductCard product={featuredProduct} view={view} /> : null}
       <div className='menu-list'>
         {regularProducts.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <ProductCard key={product.id} product={product} view={view} />
         ))}
       </div>
     </section>
