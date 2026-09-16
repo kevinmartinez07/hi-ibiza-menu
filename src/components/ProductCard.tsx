@@ -3,9 +3,10 @@ import { formatPrice } from '@/lib/format-price'
 
 type ProductCardProps = {
   product: MenuProduct
+  view?: 'visual' | 'reading'
 }
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product, view = 'visual' }: ProductCardProps) {
   const content = (
     <>
       <div className='product-heading'>
@@ -17,7 +18,7 @@ export function ProductCard({ product }: ProductCardProps) {
     </>
   )
 
-  if (!product.image) {
+  if (!product.image || view === 'reading') {
     return <article className='menu-row'>{content}</article>
   }
 
@@ -42,24 +43,16 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <article className='product-card'>
-      <img
-        className='product-card-bg'
-        src={product.image}
-        alt=''
-        aria-hidden='true'
-        width={1200}
-        height={900}
-        loading='lazy'
-      />
-      <img
-        className='product-card-img'
-        src={product.image}
-        alt={product.name}
-        width={1200}
-        height={900}
-        loading='lazy'
-      />
-      <div className='featured-overlay' aria-hidden='true' />
+      <div className='product-card-media'>
+        <img
+          className='product-card-img'
+          src={product.image}
+          alt={product.name}
+          width={1122}
+          height={1402}
+          loading='lazy'
+        />
+      </div>
       <div className='featured-info'>{content}</div>
     </article>
   )

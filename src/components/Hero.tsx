@@ -1,3 +1,5 @@
+import { siteConfig } from '@/data/site'
+
 export function Hero() {
   return (
     <header className='hero' aria-labelledby='hero-title'>
@@ -12,17 +14,18 @@ export function Hero() {
       <div className='hero-overlay' aria-hidden='true' />
       <div className='hero-content'>
         <h1 id='hero-title' className='sr-only'>
-          HI Ibiza Cocktails
+          {siteConfig.name}
         </h1>
         <img
           className='hero-brand'
-          src='/images/brand/hi-ibiza-logo.png'
-          alt='HI Ibiza Cocktails'
+          src='/images/brand/hi-ibiza-logo.webp'
+          alt=''
+          aria-hidden='true'
           width={1889}
           height={633}
         />
-        <p className='eyebrow'>Barrio Obrero · Castilla</p>
-        <p className='hero-copy'>Vive la noche. Disfruta el momento.</p>
+        <p className='eyebrow'>{siteConfig.locationsLabel}</p>
+        <p className='hero-copy'>{siteConfig.heroCopy}</p>
       </div>
     </header>
   )
