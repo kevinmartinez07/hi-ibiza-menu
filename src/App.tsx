@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { CategoryNav } from '@/components/CategoryNav'
 import { Footer } from '@/components/Footer'
+import { Header } from '@/components/Header'
 import { Hero } from '@/components/Hero'
 import { MenuSection } from '@/components/MenuSection'
 import type { MenuCategoryId } from '@/domain/menu'
@@ -60,6 +61,7 @@ export function App() {
 
   return (
     <div className='page-shell' id='top'>
+      <Header />
       <Hero />
       <main id='menu'>
         <CategoryNav
