@@ -78,16 +78,21 @@ jobs:
                 role: "user",
                 parts: [{text: ("Review this pull request diff:\n\n" + $diff)}]
               }],
-              generationConfig: {temperature: 0.1}
+              generationConfig: {temperature: 0.1, maxOutputTokens: 1200}
             }')
 
-          response_with_status=$(curl --silent --show-error --write-out '\n%{http_code}' \
-            --header 'Content-Type: application/json' \
-            --header "x-goog-api-key: $GEMINI_API_KEY" \
-            --data "$request" \
-            "https://generativelanguage.googleapis.com/v1beta/$model:generateContent")
-          response_status="${response_with_status##*$'\n'}"
-          response="${response_with_status%$'\n'*}"
+          for attempt in 1 2 3; do
+            response_with_status=$(curl --silent --show-error --write-out '\n%{http_code}' \
+              --header 'Content-Type: application/json' \
+              --header "x-goog-api-key: $GEMINI_API_KEY" \
+              --data "$request" \
+              "https://generativelanguage.googleapis.com/v1beta/$model:generateContent")
+            response_status="${response_with_status##*$'\n'}"
+            response="${response_with_status%$'\n'*}"
+
+            [ "$response_status" = "200" ] && break
+            [ "$attempt" -lt 3 ] && sleep $((attempt * 5))
+          done
 
           if [ "$response_status" != "200" ]; then
             jq -r '.error.message // "Gemini review request failed."' <<< "$response" >&2
