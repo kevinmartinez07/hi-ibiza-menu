@@ -1,16 +1,21 @@
 import { useEffect, useRef, useState } from 'react'
+import { Grid2X2, List } from 'lucide-react'
 import { CategoryNav } from '@/components/CategoryNav'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { Hero } from '@/components/Hero'
 import { MenuSection } from '@/components/MenuSection'
+import { siteConfig } from '@/data/site'
 import type { MenuCategoryId } from '@/domain/menu'
 import { menuRepository } from '@/lib/menu-repository'
 
 export function App() {
   const categories = menuRepository.getCategories()
   const products = menuRepository.getProducts()
-  const [activeCategory, setActiveCategory] = useState(categories[0]?.id ?? '')
+  const [activeCategory, setActiveCategory] = useState<MenuCategoryId>(
+    categories[0]?.id ?? 'cocktails',
+  )
+  const [menuView, setMenuView] = useState<'visual' | 'reading'>('visual')
   const navigationLock = useRef<string | null>(null)
   const navigationUnlockTimer = useRef<number | null>(null)
 
@@ -56,7 +61,13 @@ export function App() {
     )
 
     sections.forEach((section) => observer.observe(section))
-    return () => observer.disconnect()
+    return () => {
+      observer.disconnect()
+      if (navigationUnlockTimer.current !== null) {
+        window.clearTimeout(navigationUnlockTimer.current)
+        navigationUnlockTimer.current = null
+      }
+    }
   }, [categories])
 
   return (
@@ -69,12 +80,35 @@ export function App() {
           activeCategory={activeCategory}
           onSelect={selectCategory}
         />
-        <div className='menu-content'>
-          <p className='menu-intro'>Nuestra carta</p>
+        <div className={`menu-content menu-view-${menuView}`}>
+          <div className='menu-toolbar'>
+            <p className='menu-intro'>{siteConfig.menuIntro}</p>
+            <div className='view-switcher' aria-label='Vista de la carta'>
+              <button
+                className={menuView === 'visual' ? 'is-active' : ''}
+                type='button'
+                aria-pressed={menuView === 'visual'}
+                onClick={() => setMenuView('visual')}
+              >
+                <Grid2X2 size={15} aria-hidden='true' />
+                Visual
+              </button>
+              <button
+                className={menuView === 'reading' ? 'is-active' : ''}
+                type='button'
+                aria-pressed={menuView === 'reading'}
+                onClick={() => setMenuView('reading')}
+              >
+                <List size={15} aria-hidden='true' />
+                Lectura
+              </button>
+            </div>
+          </div>
           {categories.map((category) => (
             <MenuSection
               category={category}
               key={category.id}
+              view={menuView}
               products={products.filter(
                 (product) => product.categoryId === category.id,
               )}

@@ -1,8 +1,8 @@
 import type { MenuCategory, MenuCategoryId } from '@/domain/menu'
 
 type CategoryNavProps = {
-  categories: MenuCategory[]
-  activeCategory: string
+  categories: readonly MenuCategory[]
+  activeCategory: MenuCategoryId
   onSelect: (categoryId: MenuCategoryId) => void
 }
 

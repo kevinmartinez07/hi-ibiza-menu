@@ -4,7 +4,7 @@
 
 HI Ibiza is a late-night cocktail bar. The visual language is a near-black violet
 canvas, electric magenta accents and editorial product photography. The layout follows
-the Lovable reference: a narrow central composition with generous black margins.
+a narrow central composition with generous black margins.
 
 ## Color Tokens
 
@@ -36,7 +36,7 @@ the Lovable reference: a narrow central composition with generous black margins.
 
 ## Interaction
 
-- Category navigation is sticky after the hero and horizontally scrollable on small screens.
+- Category navigation is sticky after the hero and uses a compact two-row grid on small screens.
 - Active category uses a magenta underline and readable text, never color alone.
 - All interactive elements have a visible focus ring.
 - Motion is limited to small opacity and transform transitions.
@@ -45,6 +45,6 @@ the Lovable reference: a narrow central composition with generous black margins.
 ## Content Rules
 
 - Prices are rendered as Colombian pesos with no decimal places.
-- Menu copy comes from `src/data/menu.ts`, never from JSX.
+- Menu and business copy comes from `src/data/` files, never from JSX.
 - Product images are optional. A missing image must not leave an empty broken-image box.
 - Meaningful product images receive descriptive alt text.
