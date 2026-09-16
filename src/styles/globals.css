@@ -52,6 +52,41 @@ a {
   background: var(--background);
 }
 
+.site-header {
+  display: flex;
+  max-width: 960px;
+  min-height: 64px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin: 0 auto;
+  padding: 12px 20px;
+  background: var(--background);
+}
+
+.brand-mark {
+  display: inline-flex;
+  min-width: 44px;
+  align-items: center;
+}
+
+.brand-mark img {
+  width: 80px;
+  height: auto;
+}
+
+.header-link {
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.header-link:hover {
+  color: var(--foreground);
+}
+
 .hero {
   position: relative;
   min-height: 390px;
@@ -136,17 +171,17 @@ a {
   position: sticky;
   z-index: 30;
   top: 0;
-  overflow: hidden;
+  overflow-x: auto;
+  scrollbar-width: thin;
   border-block: 1px solid var(--border);
   background: color-mix(in oklab, var(--background) 90%, transparent);
   backdrop-filter: blur(14px);
 }
 
 .category-nav-inner {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  display: flex;
   width: 100%;
-  min-width: 0;
+  min-width: max-content;
   max-width: 900px;
   gap: 0;
   margin: 0 auto;
@@ -156,6 +191,7 @@ a {
 .category-nav a {
   position: relative;
   display: flex;
+  flex: 0 0 112px;
   min-height: 44px;
   align-items: center;
   justify-content: center;
@@ -432,7 +468,13 @@ a {
 
 @media (min-width: 640px) {
   .category-nav-inner {
+    display: grid;
     grid-template-columns: repeat(6, minmax(0, 1fr));
+    min-width: 0;
+  }
+
+  .category-nav a {
+    flex-basis: auto;
   }
 
   .hero {
