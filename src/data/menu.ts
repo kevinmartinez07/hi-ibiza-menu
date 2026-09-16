@@ -66,7 +66,7 @@ export const menuProducts: MenuProduct[] = [
     name: 'Águila Original',
     description: 'Botella 330 ml',
     price: 8000,
-    image: '/images/aguila.png',
+    image: '/images/aguila.webp',
     available: true,
   },
   {
@@ -75,7 +75,7 @@ export const menuProducts: MenuProduct[] = [
     name: 'Águila Light',
     description: 'Botella 330 ml',
     price: 9000,
-    image: '/images/aguila-light.png',
+    image: '/images/aguila-light.webp',
     available: true,
   },
   {
@@ -84,7 +84,7 @@ export const menuProducts: MenuProduct[] = [
     name: 'Pilsen',
     description: 'Botella 330 ml',
     price: 8000,
-    image: '/images/pilsen.png',
+    image: '/images/pilsen.webp',
     available: true,
   },
   {
@@ -101,7 +101,7 @@ export const menuProducts: MenuProduct[] = [
     name: 'Corona',
     description: 'Botella 355 ml',
     price: 12000,
-    image: '/images/corona.png',
+    image: '/images/corona.webp',
     available: true,
   },
   {
@@ -170,7 +170,7 @@ export const menuProducts: MenuProduct[] = [
     name: 'Aguardiente Antioqueño Rojo',
     description: 'Media · 375 ml',
     price: 65000,
-    image: '/images/media-aguardiente-rojo.png',
+    image: '/images/media-aguardiente-rojo.webp',
     available: true,
   },
   {
@@ -179,7 +179,7 @@ export const menuProducts: MenuProduct[] = [
     name: 'Aguardiente Antioqueño Azul Sin Azúcar',
     description: 'Media · 375 ml',
     price: 70000,
-    image: '/images/media-aguardiente-azul.png',
+    image: '/images/media-aguardiente-azul.webp',
     available: true,
   },
   {
@@ -188,7 +188,7 @@ export const menuProducts: MenuProduct[] = [
     name: 'Aguardiente Antioqueño Verde Sin Azúcar',
     description: 'Media · 375 ml',
     price: 70000,
-    image: '/images/media-aguardiente-verde.png',
+    image: '/images/media-aguardiente-verde.webp',
     available: true,
   },
   {
@@ -197,7 +197,7 @@ export const menuProducts: MenuProduct[] = [
     name: 'Aguardiente Antioqueño Rojo',
     description: 'Botella · 750 ml',
     price: 120000,
-    image: '/images/botella-aguardiente-rojo.png',
+    image: '/images/botella-aguardiente-rojo.webp',
     available: true,
   },
   {
@@ -206,7 +206,7 @@ export const menuProducts: MenuProduct[] = [
     name: 'Aguardiente Antioqueño Azul Sin Azúcar',
     description: 'Botella · 750 ml',
     price: 125000,
-    image: '/images/botella-aguardiente-azul.png',
+    image: '/images/botella-aguardiente-azul.webp',
     available: true,
   },
   {
@@ -215,7 +215,7 @@ export const menuProducts: MenuProduct[] = [
     name: 'Aguardiente Antioqueño Verde Sin Azúcar',
     description: 'Botella · 750 ml',
     price: 125000,
-    image: '/images/botella-aguardiente-verde.png',
+    image: '/images/botella-aguardiente-verde.webp',
     available: true,
   },
   {
@@ -224,7 +224,7 @@ export const menuProducts: MenuProduct[] = [
     name: 'Aguardiente Antioqueño Rojo',
     description: 'Litro · 1.000 ml',
     price: 145000,
-    image: '/images/litro-aguardiente-rojo.png',
+    image: '/images/litro-aguardiente-rojo.webp',
     available: true,
   },
   {
@@ -233,7 +233,7 @@ export const menuProducts: MenuProduct[] = [
     name: 'Aguardiente Antioqueño Azul Sin Azúcar',
     description: 'Litro · 1.000 ml',
     price: 150000,
-    image: '/images/litro-aguardiente-azul.png',
+    image: '/images/litro-aguardiente-azul.webp',
     available: true,
   },
   {
@@ -242,7 +242,7 @@ export const menuProducts: MenuProduct[] = [
     name: 'Aguardiente Antioqueño Verde Sin Azúcar',
     description: 'Litro · 1.000 ml',
     price: 150000,
-    image: '/images/litro-aguardiente-verde.png',
+    image: '/images/litro-aguardiente-verde.webp',
     available: true,
   },
   {
@@ -251,7 +251,7 @@ export const menuProducts: MenuProduct[] = [
     name: 'Aguardiente Antioqueño Rojo',
     description: 'Garrafa · 2.000 ml',
     price: 240000,
-    image: '/images/garrafa-aguardiente-rojo.png',
+    image: '/images/garrafa-aguardiente-rojo.webp',
     available: true,
   },
   {
@@ -260,7 +260,7 @@ export const menuProducts: MenuProduct[] = [
     name: 'Aguardiente Antioqueño Azul Sin Azúcar',
     description: 'Garrafa · 2.000 ml',
     price: 250000,
-    image: '/images/garrafa-aguardiente-azul.png',
+    image: '/images/garrafa-aguardiente-azul.webp',
     available: true,
   },
   {
@@ -269,7 +269,7 @@ export const menuProducts: MenuProduct[] = [
     name: 'Aguardiente Antioqueño Verde Sin Azúcar',
     description: 'Garrafa · 1.750 ml',
     price: 230000,
-    image: '/images/garrafa-aguardiente-verde.png',
+    image: '/images/garrafa-aguardiente-verde.webp',
     available: true,
   },
   {
@@ -278,7 +278,7 @@ export const menuProducts: MenuProduct[] = [
     name: 'Ron Viejo de Caldas Esencial',
     description: 'Botella · 750 ml',
     price: 150000,
-    image: '/images/ron-viejo-caldas-esencial.png',
+    image: '/images/ron-viejo-caldas-esencial.webp',
     available: true,
   },
   {
@@ -287,7 +287,7 @@ export const menuProducts: MenuProduct[] = [
     name: 'Ron Viejo de Caldas Carta de Oro',
     description: 'Botella · 750 ml',
     price: 175000,
-    image: '/images/ron-viejo-caldas-carta-de-oro.png',
+    image: '/images/ron-viejo-caldas-carta-de-oro.webp',
     available: true,
   },
   {
@@ -296,7 +296,7 @@ export const menuProducts: MenuProduct[] = [
     name: 'Buchanan’s Deluxe 12 años',
     description: 'Botella · 750 ml',
     price: 300000,
-    image: '/images/buchanans-deluxe-12.png',
+    image: '/images/buchanans-deluxe-12.webp',
     available: true,
   },
   {
@@ -371,7 +371,7 @@ export const menuProducts: MenuProduct[] = [
     name: 'Red Bull',
     description: 'Lata 355 ml',
     price: 14000,
-    image: '/images/redbull.png',
+    image: '/images/redbull.webp',
     available: true,
   },
   {
@@ -380,7 +380,7 @@ export const menuProducts: MenuProduct[] = [
     name: 'Gatorade',
     description: 'Frutos tropicales · Botella 500 ml',
     price: 9000,
-    image: '/images/gatorade.png',
+    image: '/images/gatorade.webp',
     available: true,
   },
 ]
