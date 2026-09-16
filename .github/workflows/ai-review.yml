@@ -58,6 +58,7 @@ jobs:
               | .name
               | select(test("flash"; "i"))
               | select(test("image|tts|audio"; "i") | not)]
+            | sort_by(if test("gemini-3.6-flash"; "i") then 0 else 1 end)
             | first // empty
           ' <<< "$models")
 
