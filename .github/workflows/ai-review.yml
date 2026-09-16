@@ -36,9 +36,17 @@ jobs:
             "https://api.github.com/repos/$REPOSITORY/pulls/$PR_NUMBER")
           diff=${diff:0:120000}
 
-          models=$(curl --fail --silent --show-error \
+          models_response=$(curl --silent --show-error --write-out '\n%{http_code}' \
             --header "x-goog-api-key: $GEMINI_API_KEY" \
             https://generativelanguage.googleapis.com/v1beta/models)
+          models_status="${models_response##*$'\n'}"
+          models="${models_response%$'\n'*}"
+
+          if [ "$models_status" != "200" ]; then
+            jq -r '.error.message // "Gemini model discovery failed."' <<< "$models" >&2
+            exit 1
+          fi
+
           model=$(jq -r '
             [.models[]
               | select(.supportedGenerationMethods | index("generateContent"))
