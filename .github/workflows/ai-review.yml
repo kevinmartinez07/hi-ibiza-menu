@@ -56,7 +56,8 @@ jobs:
             [.models[]
               | select(.supportedGenerationMethods | index("generateContent"))
               | .name
-              | select(test("flash"; "i"))]
+              | select(test("flash"; "i"))
+              | select(test("image|tts|audio"; "i") | not)]
             | first // empty
           ' <<< "$models")
 
@@ -64,6 +65,7 @@ jobs:
             echo 'No compatible Gemini Flash model is available for this API key.' >&2
             exit 1
           fi
+          echo "Using Gemini model: $model"
 
           request=$(jq -n \
             --arg diff "$diff" \
