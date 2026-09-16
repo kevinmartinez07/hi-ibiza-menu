@@ -80,11 +80,19 @@ jobs:
               generationConfig: {temperature: 0.1}
             }')
 
-          response=$(curl --fail --silent --show-error \
+          response_with_status=$(curl --silent --show-error --write-out '\n%{http_code}' \
             --header 'Content-Type: application/json' \
             --header "x-goog-api-key: $GEMINI_API_KEY" \
             --data "$request" \
             "https://generativelanguage.googleapis.com/v1beta/$model:generateContent")
+          response_status="${response_with_status##*$'\n'}"
+          response="${response_with_status%$'\n'*}"
+
+          if [ "$response_status" != "200" ]; then
+            jq -r '.error.message // "Gemini review request failed."' <<< "$response" >&2
+            exit 1
+          fi
+
           review=$(jq -r '[.candidates[0].content.parts[]?.text] | join("\n")' <<< "$response")
 
           if [ -z "$review" ]; then
