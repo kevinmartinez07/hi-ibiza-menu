@@ -1,5 +1,4 @@
-export type MenuCategoryId =
-  'cocktails' | 'cervezas' | 'licores' | 'botellas' | 'combos' | 'sin-alcohol'
+export type MenuCategoryId = 'cocktails' | 'cervezas' | 'licores' | 'bebidas' | 'extras'
 
 export type MenuCategory = {
   id: MenuCategoryId
@@ -11,8 +10,8 @@ export type MenuProduct = {
   id: string
   categoryId: MenuCategoryId
   name: string
-  description: string
-  price: number
+  description?: string
+  price?: number
   unit?: string
   image?: string
   featured?: boolean

@@ -11,9 +11,13 @@ export function ProductCard({ product, view = 'visual' }: ProductCardProps) {
     <>
       <div className='product-heading'>
         <h3>{product.name}</h3>
-        <p className='product-price'>{formatPrice(product.price)}</p>
+        {product.price !== undefined ? (
+          <p className='product-price'>{formatPrice(product.price)}</p>
+        ) : null}
       </div>
-      <p className='product-description'>{product.description}</p>
+      {product.description ? (
+        <p className='product-description'>{product.description}</p>
+      ) : null}
       {!product.available ? <span className='availability'>No disponible</span> : null}
     </>
   )

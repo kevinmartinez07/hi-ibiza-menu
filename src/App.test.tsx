@@ -24,7 +24,7 @@ describe('App', () => {
     ).toBeInTheDocument()
     const navigation = screen.getByRole('navigation', { name: /categorías del menú/i })
     expect(
-      within(navigation).getByRole('link', { name: /^Cocktails$/i }),
+      within(navigation).getByRole('link', { name: /^Cócteles$/i }),
     ).toBeInTheDocument()
     expect(
       within(navigation).getByRole('link', { name: 'Cervezas' }),
@@ -33,12 +33,9 @@ describe('App', () => {
       within(navigation).getByRole('link', { name: 'Licores' }),
     ).toBeInTheDocument()
     expect(
-      within(navigation).getByRole('link', { name: 'Botellas' }),
+      within(navigation).getByRole('link', { name: 'Bebidas' }),
     ).toBeInTheDocument()
-    expect(within(navigation).getByRole('link', { name: 'Combos' })).toBeInTheDocument()
-    expect(
-      within(navigation).getByRole('link', { name: 'Sin alcohol' }),
-    ).toBeInTheDocument()
+    expect(within(navigation).getByRole('link', { name: 'Extras' })).toBeInTheDocument()
   })
 
   it('renders the site header and menu call to action', () => {
@@ -57,8 +54,9 @@ describe('App', () => {
     render(<App />)
 
     expect(screen.getByRole('heading', { name: 'Mojito' })).toBeInTheDocument()
-    expect(screen.getByText(/22\.000/)).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: 'Ibiza Sunset' })).toBeInTheDocument()
+    expect(screen.getAllByText(/20\.000/).length).toBeGreaterThan(0)
+    expect(screen.getByRole('heading', { name: 'Lychee Martini' })).toBeInTheDocument()
+    expect(screen.getAllByText('No disponible').length).toBe(5)
   })
 
   it('updates the active category when a category is selected', async () => {
@@ -66,10 +64,67 @@ describe('App', () => {
     render(<App />)
 
     const navigation = screen.getByRole('navigation', { name: /categorías del menú/i })
-    const combosLink = within(navigation).getByRole('link', { name: 'Combos' })
-    await user.click(combosLink)
+    const extrasLink = within(navigation).getByRole('link', { name: 'Extras' })
+    await user.click(extrasLink)
 
-    expect(combosLink).toHaveAttribute('aria-current', 'location')
+    expect(extrasLink).toHaveAttribute('aria-current', 'location')
+  })
+
+  it('filters products and categories from the search field', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    await user.type(
+      screen.getByRole('searchbox', { name: /buscar productos/i }),
+      'Buchanan',
+    )
+
+    expect(
+      screen.getByRole('heading', { name: 'Botella Buchanan’s Deluxe' }),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole('heading', { name: 'Media Buchanan’s Deluxe' }),
+    ).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Mojito' })).not.toBeInTheDocument()
+    const navigation = screen.getByRole('navigation', { name: /categorías del menú/i })
+    expect(
+      within(navigation).queryByRole('link', { name: 'Cócteles' }),
+    ).not.toBeInTheDocument()
+
+    await user.click(screen.getByRole('button', { name: 'Limpiar búsqueda' }))
+    expect(screen.getByRole('heading', { name: 'Mojito' })).toBeInTheDocument()
+  })
+
+  it('matches products without requiring accents', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    await user.type(
+      screen.getByRole('searchbox', { name: /buscar productos/i }),
+      'aguila',
+    )
+
+    expect(screen.getByRole('heading', { name: 'Águila' })).toBeInTheDocument()
+  })
+
+  it('keeps footer links limited to visible categories while searching', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    await user.type(
+      screen.getByRole('searchbox', { name: /buscar productos/i }),
+      'Buchanan',
+    )
+
+    const footerNavigation = screen.getByRole('navigation', {
+      name: 'Secciones del menú',
+    })
+    expect(
+      within(footerNavigation).getByRole('link', { name: 'Licores' }),
+    ).toBeInTheDocument()
+    expect(
+      within(footerNavigation).queryByRole('link', { name: 'Cócteles' }),
+    ).not.toBeInTheDocument()
   })
 
   it('switches to a reading-friendly menu view', async () => {
@@ -82,8 +137,6 @@ describe('App', () => {
       'aria-pressed',
       'true',
     )
-    expect(
-      screen.queryByRole('img', { name: 'Águila Original' }),
-    ).not.toBeInTheDocument()
+    expect(screen.queryByRole('img', { name: 'Águila' })).not.toBeInTheDocument()
   })
 })

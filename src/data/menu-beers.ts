@@ -1,0 +1,72 @@
+import type { MenuProduct } from '@/domain/menu'
+
+export const beerProducts: MenuProduct[] = [
+  {
+    id: 'aguila',
+    categoryId: 'cervezas',
+    name: 'Águila',
+    price: 8000,
+    image: '/images/products/aguila.webp',
+    available: true,
+  },
+  {
+    id: 'aguila-light',
+    categoryId: 'cervezas',
+    name: 'Águila Light',
+    price: 8000,
+    image: '/images/products/aguila-light.webp',
+    available: true,
+  },
+  {
+    id: 'club-colombia',
+    categoryId: 'cervezas',
+    name: 'Club Colombia',
+    price: 8000,
+    available: true,
+  },
+  {
+    id: 'corona',
+    categoryId: 'cervezas',
+    name: 'Corona',
+    price: 11000,
+    image: '/images/products/corona.webp',
+    available: true,
+  },
+  {
+    id: 'costenita',
+    categoryId: 'cervezas',
+    name: 'Costeñita',
+    price: 8000,
+    available: true,
+  },
+  {
+    id: 'cerveza-michelada',
+    categoryId: 'cervezas',
+    name: 'Michelada',
+    price: 10000,
+    available: true,
+  },
+  {
+    id: 'pilsen',
+    categoryId: 'cervezas',
+    name: 'Pilsen',
+    price: 8000,
+    image: '/images/products/pilsen.webp',
+    available: true,
+  },
+  { id: 'poker', categoryId: 'cervezas', name: 'Poker', price: 8000, available: true },
+  {
+    id: 'corona-michelada',
+    categoryId: 'cervezas',
+    name: 'Corona Michelada',
+    price: 13000,
+    available: true,
+  },
+  {
+    id: 'coronita',
+    categoryId: 'cervezas',
+    name: 'Coronita',
+    price: 8000,
+    available: true,
+  },
+]
