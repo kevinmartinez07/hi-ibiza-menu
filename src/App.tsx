@@ -1,5 +1,5 @@
 import { useDeferredValue, useEffect, useRef, useState } from 'react'
-import type { FocusEvent, KeyboardEvent, MouseEvent } from 'react'
+import type { MouseEvent } from 'react'
 import { ArrowUp, Grid2X2, List, Search, X } from 'lucide-react'
 import { CategoryNav } from '@/components/CategoryNav'
 import { Footer } from '@/components/Footer'
@@ -27,7 +27,6 @@ export function App() {
   const navigationUnlockTimer = useRef<number | null>(null)
   const previousFocus = useRef<HTMLElement | null>(null)
   const focusRestoreTimer = useRef<number | null>(null)
-  const skipNextProductFocus = useRef(false)
 
   const normalizedSearchQuery = normalizeSearchText(deferredSearchQuery.trim())
   const matchesSearch = (product: (typeof products)[number]) =>
@@ -137,22 +136,12 @@ export function App() {
     : undefined
 
   const openProductModalForElement = (element: HTMLElement | null) => {
-    if (skipNextProductFocus.current) return
-
     const productId = element?.dataset.productId
 
     if (!productId || !products.some((product) => product.id === productId)) return
 
     previousFocus.current = element
     setSelectedProductId(productId)
-  }
-
-  const openProductModal = (event: FocusEvent<HTMLDivElement>) => {
-    openProductModalForElement(
-      event.target instanceof HTMLElement
-        ? event.target.closest<HTMLElement>('[data-product-id]')
-        : null,
-    )
   }
 
   const openProductModalOnClick = (event: MouseEvent<HTMLDivElement>) => {
@@ -163,28 +152,13 @@ export function App() {
     )
   }
 
-  const openProductModalOnKeyboard = (event: KeyboardEvent<HTMLDivElement>) => {
-    if (event.key !== 'Enter' && event.key !== ' ') return
-
-    const focusedProduct =
-      event.target instanceof HTMLElement
-        ? event.target.closest<HTMLElement>('[data-product-id]')
-        : null
-    if (!focusedProduct) return
-
-    event.preventDefault()
-    openProductModalForElement(focusedProduct)
-  }
-
   const closeProductModal = () => {
-    skipNextProductFocus.current = true
     setSelectedProductId(null)
     if (focusRestoreTimer.current !== null) {
       window.clearTimeout(focusRestoreTimer.current)
     }
     focusRestoreTimer.current = window.setTimeout(() => {
       previousFocus.current?.focus()
-      skipNextProductFocus.current = false
       focusRestoreTimer.current = null
     }, 0)
   }
@@ -203,9 +177,7 @@ export function App() {
         ) : null}
         <div
           className={`menu-content menu-view-${menuView}`}
-          onFocusCapture={openProductModal}
           onClickCapture={openProductModalOnClick}
-          onKeyDownCapture={openProductModalOnKeyboard}
         >
           <div className='menu-toolbar'>
             <p className='menu-intro'>{siteConfig.menuIntro}</p>
