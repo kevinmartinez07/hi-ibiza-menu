@@ -1,4 +1,5 @@
 import type { MenuProduct } from '@/domain/menu'
+import { siteConfig } from '@/data/site'
 import { formatPrice } from '@/lib/format-price'
 
 type ProductCardProps = {
@@ -21,16 +22,18 @@ export function ProductCard({ product, view = 'visual' }: ProductCardProps) {
       {!product.available ? <span className='availability'>No disponible</span> : null}
     </>
   )
+  const productAction = (
+    <button
+      className='product-card-action'
+      type='button'
+      aria-label={siteConfig.productDetails.openLabel(product.name)}
+    />
+  )
 
   if (!product.image || view === 'reading') {
     return (
-      <article
-        className='menu-row'
-        data-product-id={product.id}
-        tabIndex={0}
-        role='button'
-        aria-label={`Abrir detalles de ${product.name}`}
-      >
+      <article className='menu-row' data-product-id={product.id}>
+        {productAction}
         {content}
       </article>
     )
@@ -38,13 +41,8 @@ export function ProductCard({ product, view = 'visual' }: ProductCardProps) {
 
   if (product.featured) {
     return (
-      <article
-        className='featured-drink'
-        data-product-id={product.id}
-        tabIndex={0}
-        role='button'
-        aria-label={`Abrir detalles de ${product.name}`}
-      >
+      <article className='featured-drink' data-product-id={product.id}>
+        {productAction}
         <img
           src={product.image}
           alt={product.name}
@@ -62,13 +60,8 @@ export function ProductCard({ product, view = 'visual' }: ProductCardProps) {
   }
 
   return (
-    <article
-      className='product-card'
-      data-product-id={product.id}
-      tabIndex={0}
-      role='button'
-      aria-label={`Abrir detalles de ${product.name}`}
-    >
+    <article className='product-card' data-product-id={product.id}>
+      {productAction}
       <div className='product-card-media'>
         <img
           className='product-card-img'

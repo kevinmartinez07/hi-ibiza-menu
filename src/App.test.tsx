@@ -167,14 +167,16 @@ describe('App', () => {
     expect(window.scrollTo).toHaveBeenCalledWith({ top: 0, behavior: 'smooth' })
   })
 
-  it('opens product details when a product receives focus', async () => {
+  it('opens product details with keyboard activation', async () => {
     render(<App />)
 
-    const productHeading = screen.getByRole('heading', { name: 'Mojito' })
-    const productCard = productHeading.closest('[data-product-id]')
-    if (!(productCard instanceof HTMLElement)) throw new Error('Product card not found')
+    const productAction = screen.getByRole('button', {
+      name: 'Abrir detalles de Mojito',
+    })
 
-    fireEvent.focus(productCard)
+    productAction.focus()
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    fireEvent.click(productAction)
 
     expect(screen.getByRole('dialog', { name: /mojito/i })).toBeInTheDocument()
     expect(

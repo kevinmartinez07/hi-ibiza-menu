@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { X } from 'lucide-react'
 import type { KeyboardEvent as ReactKeyboardEvent } from 'react'
+import { siteConfig } from '@/data/site'
 import type { MenuProduct } from '@/domain/menu'
 import { formatPrice } from '@/lib/format-price'
 
@@ -87,7 +88,7 @@ export function ProductModal({ product, onClose }: ProductModalProps) {
           ref={closeButtonRef}
           className='product-modal-close'
           type='button'
-          aria-label='Cerrar detalle del producto'
+          aria-label={siteConfig.productDetails.closeLabel}
           onClick={requestClose}
         >
           <X size={22} aria-hidden='true' />
@@ -98,7 +99,7 @@ export function ProductModal({ product, onClose }: ProductModalProps) {
           </div>
         ) : null}
         <div className='product-modal-details'>
-          <p className='featured-label'>Detalle del producto</p>
+          <p className='featured-label'>{siteConfig.productDetails.eyebrow}</p>
           <h2 id='product-modal-title'>{product.name}</h2>
           {product.price !== undefined ? (
             <p className='product-modal-price'>{formatPrice(product.price)}</p>
