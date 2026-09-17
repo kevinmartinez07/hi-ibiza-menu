@@ -55,7 +55,6 @@ export function Footer() {
           </div>
         </div>
       </div>
-      <p className='footer-note'>{siteConfig.openingHours}</p>
     </footer>
   )
 }
