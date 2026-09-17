@@ -116,25 +116,28 @@ export function App() {
         <div className={`menu-content menu-view-${menuView}`}>
           <div className='menu-toolbar'>
             <p className='menu-intro'>{siteConfig.menuIntro}</p>
-            <label className='search-field'>
+            <div className='search-field'>
               <Search size={16} aria-hidden='true' />
-              <span className='sr-only'>Buscar productos en la carta</span>
+              <label className='sr-only' htmlFor='menu-search'>
+                {siteConfig.search.label}
+              </label>
               <input
+                id='menu-search'
                 type='search'
                 value={searchQuery}
-                placeholder='Buscar productos'
+                placeholder={siteConfig.search.placeholder}
                 onChange={(event) => setSearchQuery(event.target.value)}
               />
               {searchQuery ? (
                 <button
                   type='button'
-                  aria-label='Limpiar búsqueda'
+                  aria-label={siteConfig.search.clearLabel}
                   onClick={() => setSearchQuery('')}
                 >
                   <X size={15} aria-hidden='true' />
                 </button>
               ) : null}
-            </label>
+            </div>
             <div className='view-switcher' aria-label='Vista de la carta'>
               <button
                 className={menuView === 'visual' ? 'is-active' : ''}
@@ -170,7 +173,7 @@ export function App() {
             ))
           ) : (
             <p className='search-empty' role='status'>
-              No encontramos productos con “{deferredSearchQuery}”.
+              {siteConfig.search.emptyMessage(deferredSearchQuery)}
             </p>
           )}
         </div>
