@@ -17,6 +17,31 @@
       "description": "Reviews frontend changes for architecture, TypeScript and maintainability issues.",
       "mode": "subagent",
       "permission": { "edit": "deny" }
+    },
+    "page-tester": {
+      "description": "Runs the HI Ibiza quality checks (typecheck, lint, format, tests) and reports pass/fail per command.",
+      "mode": "subagent",
+      "permission": { "edit": "deny" }
+    },
+    "page-prober": {
+      "description": "Drives the live HI Ibiza menu with the browse tool and reports functional results per viewport.",
+      "mode": "subagent",
+      "permission": { "edit": "deny" }
+    },
+    "falenca-finder": {
+      "description": "Read-only fault scan: console errors, broken assets, accessibility gaps and data inconsistencies.",
+      "mode": "subagent",
+      "permission": { "edit": "deny" }
+    },
+    "ui-ux-expert": {
+      "description": "Detailed UI/UX audit using measured geometry, spacing scale, typography, contrast and touch targets.",
+      "mode": "subagent",
+      "permission": { "edit": "deny" }
+    },
+    "design-auditor": {
+      "description": "Whole-app design coherence review across hero, nav, all categories, search states and footer.",
+      "mode": "subagent",
+      "permission": { "edit": "deny" }
     }
   }
 }
