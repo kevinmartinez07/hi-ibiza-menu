@@ -55,7 +55,7 @@ export function Footer() {
           </div>
         </div>
       </div>
-      <p className='footer-note'>Jue — Dom · La noche empieza a las 5 PM</p>
+      <p className='footer-note'>{siteConfig.openingHours}</p>
     </footer>
   )
 }
