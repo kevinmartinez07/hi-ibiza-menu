@@ -1,3 +1,5 @@
+import { ArrowDown } from 'lucide-react'
+
 export function Header() {
   return (
     <header className='site-header'>
@@ -5,7 +7,7 @@ export function Header() {
         <img src='/images/brand/hi-ibiza-logo.webp' alt='' aria-hidden='true' />
       </a>
       <a className='header-link' href='#menu'>
-        Ver carta <span aria-hidden='true'>↓</span>
+        Ver carta <ArrowDown size={14} aria-hidden='true' />
       </a>
     </header>
   )

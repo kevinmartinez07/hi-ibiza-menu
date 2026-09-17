@@ -21,6 +21,9 @@
 - Catalog access goes through `src/lib/menu-repository.ts`.
 - The deployed site is `https://hi-ibiza-menu.vercel.app`.
 - The deployment previously returned HTTP 200 and had no required environment variables.
+- Cloudflare Pages is the planned future host. Recommended settings are
+  `bun install --frozen-lockfile && bun run build`, output directory `dist`,
+  and Bun `1.3.8`. Keep the Vercel deployment until Cloudflare is validated.
 
 ## Mobile Navigation Issue
 

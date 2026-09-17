@@ -1,6 +1,12 @@
 export const siteConfig = {
   name: 'HI Ibiza Cocktails',
   menuIntro: 'Nuestra carta',
+  search: {
+    label: 'Buscar productos en la carta',
+    placeholder: 'Buscar productos',
+    clearLabel: 'Limpiar búsqueda',
+    emptyMessage: (query: string) => `No encontramos productos con “${query}”.`,
+  },
   heroCopy: 'Vive la noche. Disfruta el momento.',
   tagline: 'Donde cada noche tiene su propio brillo.',
   locations: [
