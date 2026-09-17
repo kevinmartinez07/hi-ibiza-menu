@@ -23,12 +23,28 @@ export function ProductCard({ product, view = 'visual' }: ProductCardProps) {
   )
 
   if (!product.image || view === 'reading') {
-    return <article className='menu-row'>{content}</article>
+    return (
+      <article
+        className='menu-row'
+        data-product-id={product.id}
+        tabIndex={0}
+        role='button'
+        aria-label={`Abrir detalles de ${product.name}`}
+      >
+        {content}
+      </article>
+    )
   }
 
   if (product.featured) {
     return (
-      <article className='featured-drink'>
+      <article
+        className='featured-drink'
+        data-product-id={product.id}
+        tabIndex={0}
+        role='button'
+        aria-label={`Abrir detalles de ${product.name}`}
+      >
         <img
           src={product.image}
           alt={product.name}
@@ -46,7 +62,13 @@ export function ProductCard({ product, view = 'visual' }: ProductCardProps) {
   }
 
   return (
-    <article className='product-card'>
+    <article
+      className='product-card'
+      data-product-id={product.id}
+      tabIndex={0}
+      role='button'
+      aria-label={`Abrir detalles de ${product.name}`}
+    >
       <div className='product-card-media'>
         <img
           className='product-card-img'

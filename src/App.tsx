@@ -1,10 +1,12 @@
 import { useDeferredValue, useEffect, useRef, useState } from 'react'
-import { Grid2X2, List, Search, X } from 'lucide-react'
+import type { FocusEvent, KeyboardEvent, MouseEvent } from 'react'
+import { ArrowUp, Grid2X2, List, Search, X } from 'lucide-react'
 import { CategoryNav } from '@/components/CategoryNav'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
 import { Hero } from '@/components/Hero'
 import { MenuSection } from '@/components/MenuSection'
+import { ProductModal } from '@/components/ProductModal'
 import { siteConfig } from '@/data/site'
 import type { MenuCategoryId } from '@/domain/menu'
 import { menuRepository } from '@/lib/menu-repository'
@@ -18,9 +20,14 @@ export function App() {
   )
   const [menuView, setMenuView] = useState<'visual' | 'reading'>('visual')
   const [searchQuery, setSearchQuery] = useState('')
+  const [showBackToTop, setShowBackToTop] = useState(false)
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(null)
   const deferredSearchQuery = useDeferredValue(searchQuery)
   const navigationLock = useRef<string | null>(null)
   const navigationUnlockTimer = useRef<number | null>(null)
+  const previousFocus = useRef<HTMLElement | null>(null)
+  const focusRestoreTimer = useRef<number | null>(null)
+  const skipNextProductFocus = useRef(false)
 
   const normalizedSearchQuery = normalizeSearchText(deferredSearchQuery.trim())
   const matchesSearch = (product: (typeof products)[number]) =>
@@ -62,6 +69,10 @@ export function App() {
         window.clearTimeout(navigationUnlockTimer.current)
         navigationUnlockTimer.current = null
       }
+      if (focusRestoreTimer.current !== null) {
+        window.clearTimeout(focusRestoreTimer.current)
+        focusRestoreTimer.current = null
+      }
       navigationLock.current = null
     }
   }, [])
@@ -101,6 +112,83 @@ export function App() {
     }
   }, [categories, visibleCategoryIds])
 
+  useEffect(() => {
+    const updateBackToTopVisibility = () => {
+      setShowBackToTop(window.scrollY > 480)
+    }
+
+    updateBackToTopVisibility()
+    window.addEventListener('scroll', updateBackToTopVisibility, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', updateBackToTopVisibility)
+    }
+  }, [])
+
+  const scrollToTop = () => {
+    const prefersReducedMotion =
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' })
+  }
+
+  const selectedProduct = selectedProductId
+    ? products.find((product) => product.id === selectedProductId)
+    : undefined
+
+  const openProductModalForElement = (element: HTMLElement | null) => {
+    if (skipNextProductFocus.current) return
+
+    const productId = element?.dataset.productId
+
+    if (!productId || !products.some((product) => product.id === productId)) return
+
+    previousFocus.current = element
+    setSelectedProductId(productId)
+  }
+
+  const openProductModal = (event: FocusEvent<HTMLDivElement>) => {
+    openProductModalForElement(
+      event.target instanceof HTMLElement
+        ? event.target.closest<HTMLElement>('[data-product-id]')
+        : null,
+    )
+  }
+
+  const openProductModalOnClick = (event: MouseEvent<HTMLDivElement>) => {
+    openProductModalForElement(
+      event.target instanceof HTMLElement
+        ? event.target.closest<HTMLElement>('[data-product-id]')
+        : null,
+    )
+  }
+
+  const openProductModalOnKeyboard = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (event.key !== 'Enter' && event.key !== ' ') return
+
+    const focusedProduct =
+      event.target instanceof HTMLElement
+        ? event.target.closest<HTMLElement>('[data-product-id]')
+        : null
+    if (!focusedProduct) return
+
+    event.preventDefault()
+    openProductModalForElement(focusedProduct)
+  }
+
+  const closeProductModal = () => {
+    skipNextProductFocus.current = true
+    setSelectedProductId(null)
+    if (focusRestoreTimer.current !== null) {
+      window.clearTimeout(focusRestoreTimer.current)
+    }
+    focusRestoreTimer.current = window.setTimeout(() => {
+      previousFocus.current?.focus()
+      skipNextProductFocus.current = false
+      focusRestoreTimer.current = null
+    }, 0)
+  }
+
   return (
     <div className='page-shell' id='top'>
       <Header />
@@ -113,7 +201,12 @@ export function App() {
             onSelect={selectCategory}
           />
         ) : null}
-        <div className={`menu-content menu-view-${menuView}`}>
+        <div
+          className={`menu-content menu-view-${menuView}`}
+          onFocusCapture={openProductModal}
+          onClickCapture={openProductModalOnClick}
+          onKeyDownCapture={openProductModalOnKeyboard}
+        >
           <div className='menu-toolbar'>
             <p className='menu-intro'>{siteConfig.menuIntro}</p>
             <div className='search-field'>
@@ -138,7 +231,10 @@ export function App() {
                 </button>
               ) : null}
             </div>
-            <div className='view-switcher' aria-label='Vista de la carta'>
+            <div
+              className={`view-switcher${menuView === 'reading' ? ' is-reading' : ''}`}
+              aria-label='Vista de la carta'
+            >
               <button
                 className={menuView === 'visual' ? 'is-active' : ''}
                 type='button'
@@ -179,6 +275,19 @@ export function App() {
         </div>
       </main>
       <Footer categories={visibleCategories} />
+      {showBackToTop ? (
+        <button
+          className='back-to-top'
+          type='button'
+          aria-label='Volver arriba'
+          onClick={scrollToTop}
+        >
+          <ArrowUp size={18} aria-hidden='true' />
+        </button>
+      ) : null}
+      {selectedProduct ? (
+        <ProductModal product={selectedProduct} onClose={closeProductModal} />
+      ) : null}
     </div>
   )
 }
