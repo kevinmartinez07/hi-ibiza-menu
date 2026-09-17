@@ -8,6 +8,7 @@ import { MenuSection } from '@/components/MenuSection'
 import { siteConfig } from '@/data/site'
 import type { MenuCategoryId } from '@/domain/menu'
 import { menuRepository } from '@/lib/menu-repository'
+import { normalizeSearchText } from '@/lib/normalize-search-text'
 
 export function App() {
   const categories = menuRepository.getCategories()
@@ -21,14 +22,14 @@ export function App() {
   const navigationLock = useRef<string | null>(null)
   const navigationUnlockTimer = useRef<number | null>(null)
 
-  const normalizedSearchQuery = deferredSearchQuery.trim().toLocaleLowerCase()
+  const normalizedSearchQuery = normalizeSearchText(deferredSearchQuery.trim())
   const matchesSearch = (product: (typeof products)[number]) =>
     normalizedSearchQuery.length === 0 ||
-    [product.name, product.description]
-      .filter((value): value is string => Boolean(value))
-      .join(' ')
-      .toLocaleLowerCase()
-      .includes(normalizedSearchQuery)
+    normalizeSearchText(
+      [product.name, product.description]
+        .filter((value): value is string => Boolean(value))
+        .join(' '),
+    ).includes(normalizedSearchQuery)
   const visibleCategories = categories.filter((category) =>
     products.some(
       (product) => product.categoryId === category.id && matchesSearch(product),
@@ -54,6 +55,16 @@ export function App() {
       navigationUnlockTimer.current = null
     }, 1600)
   }
+
+  useEffect(() => {
+    return () => {
+      if (navigationUnlockTimer.current !== null) {
+        window.clearTimeout(navigationUnlockTimer.current)
+        navigationUnlockTimer.current = null
+      }
+      navigationLock.current = null
+    }
+  }, [])
 
   useEffect(() => {
     if (typeof IntersectionObserver === 'undefined') return
@@ -87,10 +98,6 @@ export function App() {
     sections.forEach((section) => observer.observe(section))
     return () => {
       observer.disconnect()
-      if (navigationUnlockTimer.current !== null) {
-        window.clearTimeout(navigationUnlockTimer.current)
-        navigationUnlockTimer.current = null
-      }
     }
   }, [categories, visibleCategoryIds])
 
@@ -168,7 +175,7 @@ export function App() {
           )}
         </div>
       </main>
-      <Footer />
+      <Footer categories={visibleCategories} />
     </div>
   )
 }
