@@ -194,5 +194,6 @@ describe('App', () => {
     await waitFor(() => {
       expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
     })
+    expect(document.activeElement).toBe(productAction)
   })
 })

@@ -136,19 +136,21 @@ export function App() {
     : undefined
 
   const openProductModalForElement = (element: HTMLElement | null) => {
-    const productId = element?.dataset.productId
+    const productCard = element?.closest<HTMLElement>('[data-product-id]')
+    const productId = productCard?.dataset.productId
 
     if (!productId || !products.some((product) => product.id === productId)) return
 
-    previousFocus.current = element
+    previousFocus.current =
+      element?.closest<HTMLButtonElement>('.product-card-action') ??
+      productCard?.querySelector<HTMLButtonElement>('.product-card-action') ??
+      null
     setSelectedProductId(productId)
   }
 
   const openProductModalOnClick = (event: MouseEvent<HTMLDivElement>) => {
     openProductModalForElement(
-      event.target instanceof HTMLElement
-        ? event.target.closest<HTMLElement>('[data-product-id]')
-        : null,
+      event.target instanceof HTMLElement ? event.target : null,
     )
   }
 
