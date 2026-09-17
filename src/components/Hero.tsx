@@ -2,7 +2,7 @@ import { siteConfig } from '@/data/site'
 
 export function Hero() {
   return (
-    <header className='hero' aria-labelledby='hero-title'>
+    <section className='hero' aria-labelledby='hero-title'>
       <img
         className='hero-image'
         src='/images/hero/hi-ibiza-hero.jpg'
@@ -27,6 +27,6 @@ export function Hero() {
         <p className='eyebrow'>{siteConfig.locationsLabel}</p>
         <p className='hero-copy'>{siteConfig.heroCopy}</p>
       </div>
-    </header>
+    </section>
   )
 }

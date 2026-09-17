@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react'
-import { Grid2X2, List } from 'lucide-react'
+import { useDeferredValue, useEffect, useRef, useState } from 'react'
+import { Grid2X2, List, Search, X } from 'lucide-react'
 import { CategoryNav } from '@/components/CategoryNav'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
@@ -8,6 +8,7 @@ import { MenuSection } from '@/components/MenuSection'
 import { siteConfig } from '@/data/site'
 import type { MenuCategoryId } from '@/domain/menu'
 import { menuRepository } from '@/lib/menu-repository'
+import { normalizeSearchText } from '@/lib/normalize-search-text'
 
 export function App() {
   const categories = menuRepository.getCategories()
@@ -16,8 +17,30 @@ export function App() {
     categories[0]?.id ?? 'cocktails',
   )
   const [menuView, setMenuView] = useState<'visual' | 'reading'>('visual')
+  const [searchQuery, setSearchQuery] = useState('')
+  const deferredSearchQuery = useDeferredValue(searchQuery)
   const navigationLock = useRef<string | null>(null)
   const navigationUnlockTimer = useRef<number | null>(null)
+
+  const normalizedSearchQuery = normalizeSearchText(deferredSearchQuery.trim())
+  const matchesSearch = (product: (typeof products)[number]) =>
+    normalizedSearchQuery.length === 0 ||
+    normalizeSearchText(
+      [product.name, product.description]
+        .filter((value): value is string => Boolean(value))
+        .join(' '),
+    ).includes(normalizedSearchQuery)
+  const visibleCategories = categories.filter((category) =>
+    products.some(
+      (product) => product.categoryId === category.id && matchesSearch(product),
+    ),
+  )
+  const visibleCategoryIds = visibleCategories.map((category) => category.id).join('|')
+  const displayedActiveCategory = visibleCategories.some(
+    (category) => category.id === activeCategory,
+  )
+    ? activeCategory
+    : (visibleCategories[0]?.id ?? activeCategory)
 
   const selectCategory = (categoryId: MenuCategoryId) => {
     setActiveCategory(categoryId)
@@ -34,9 +57,21 @@ export function App() {
   }
 
   useEffect(() => {
+    return () => {
+      if (navigationUnlockTimer.current !== null) {
+        window.clearTimeout(navigationUnlockTimer.current)
+        navigationUnlockTimer.current = null
+      }
+      navigationLock.current = null
+    }
+  }, [])
+
+  useEffect(() => {
     if (typeof IntersectionObserver === 'undefined') return
 
+    const visibleIds = new Set(visibleCategoryIds.split('|'))
     const sections = categories
+      .filter((category) => visibleIds.has(category.id))
       .map((category) => document.getElementById(category.id))
       .filter((section): section is HTMLElement => section !== null)
 
@@ -63,26 +98,46 @@ export function App() {
     sections.forEach((section) => observer.observe(section))
     return () => {
       observer.disconnect()
-      if (navigationUnlockTimer.current !== null) {
-        window.clearTimeout(navigationUnlockTimer.current)
-        navigationUnlockTimer.current = null
-      }
     }
-  }, [categories])
+  }, [categories, visibleCategoryIds])
 
   return (
     <div className='page-shell' id='top'>
       <Header />
       <Hero />
       <main id='menu'>
-        <CategoryNav
-          categories={categories}
-          activeCategory={activeCategory}
-          onSelect={selectCategory}
-        />
+        {visibleCategories.length > 0 ? (
+          <CategoryNav
+            categories={visibleCategories}
+            activeCategory={displayedActiveCategory}
+            onSelect={selectCategory}
+          />
+        ) : null}
         <div className={`menu-content menu-view-${menuView}`}>
           <div className='menu-toolbar'>
             <p className='menu-intro'>{siteConfig.menuIntro}</p>
+            <div className='search-field'>
+              <Search size={16} aria-hidden='true' />
+              <label className='sr-only' htmlFor='menu-search'>
+                {siteConfig.search.label}
+              </label>
+              <input
+                id='menu-search'
+                type='search'
+                value={searchQuery}
+                placeholder={siteConfig.search.placeholder}
+                onChange={(event) => setSearchQuery(event.target.value)}
+              />
+              {searchQuery ? (
+                <button
+                  type='button'
+                  aria-label={siteConfig.search.clearLabel}
+                  onClick={() => setSearchQuery('')}
+                >
+                  <X size={15} aria-hidden='true' />
+                </button>
+              ) : null}
+            </div>
             <div className='view-switcher' aria-label='Vista de la carta'>
               <button
                 className={menuView === 'visual' ? 'is-active' : ''}
@@ -104,19 +159,26 @@ export function App() {
               </button>
             </div>
           </div>
-          {categories.map((category) => (
-            <MenuSection
-              category={category}
-              key={category.id}
-              view={menuView}
-              products={products.filter(
-                (product) => product.categoryId === category.id,
-              )}
-            />
-          ))}
+          {visibleCategories.length > 0 ? (
+            visibleCategories.map((category) => (
+              <MenuSection
+                category={category}
+                key={category.id}
+                view={menuView}
+                products={products.filter(
+                  (product) =>
+                    product.categoryId === category.id && matchesSearch(product),
+                )}
+              />
+            ))
+          ) : (
+            <p className='search-empty' role='status'>
+              {siteConfig.search.emptyMessage(deferredSearchQuery)}
+            </p>
+          )}
         </div>
       </main>
-      <Footer />
+      <Footer categories={visibleCategories} />
     </div>
   )
 }

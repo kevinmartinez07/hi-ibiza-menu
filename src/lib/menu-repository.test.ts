@@ -5,10 +5,10 @@ import { menuRepository } from '@/lib/menu-repository'
 
 describe('menuRepository', () => {
   it('exposes the declared menu categories', () => {
-    expect(menuRepository.getCategories()).toHaveLength(6)
+    expect(menuRepository.getCategories()).toHaveLength(5)
     expect(menuRepository.getCategories()[0]).toMatchObject({
       id: 'cocktails',
-      name: 'Cocktails',
+      name: 'Cócteles',
     })
   })
 
@@ -17,7 +17,7 @@ describe('menuRepository', () => {
       menuRepository.getCategories().map((category) => category.id),
     )
 
-    expect(menuRepository.getProducts()).toHaveLength(43)
+    expect(menuRepository.getProducts()).toHaveLength(93)
     expect(
       menuRepository
         .getProducts()
@@ -26,10 +26,39 @@ describe('menuRepository', () => {
   })
 
   it('returns only products for the requested category', () => {
-    const products = menuRepository.getProductsByCategory('combos')
+    const products = menuRepository.getProductsByCategory('extras')
 
     expect(products.length).toBeGreaterThan(0)
-    expect(products.every((product) => product.categoryId === 'combos')).toBe(true)
+    expect(products.every((product) => product.categoryId === 'extras')).toBe(true)
+  })
+
+  it('keeps liquor presentations together', () => {
+    const liquorIds = menuRepository
+      .getProductsByCategory('licores')
+      .map((product) => product.id)
+
+    expect(liquorIds.indexOf('botella-buchanans-deluxe')).toBe(
+      liquorIds.indexOf('media-buchanans-deluxe') - 1,
+    )
+    expect(liquorIds.indexOf('botella-aguardiente-azul')).toBe(0)
+  })
+
+  it('allows pending products without a price', () => {
+    const lycheeMartini = menuRepository
+      .getProducts()
+      .find((product) => product.id === 'lychee-martini')
+
+    expect(lycheeMartini).toMatchObject({ available: false })
+    expect(lycheeMartini?.price).toBeUndefined()
+  })
+
+  it('keeps a price on every available product', () => {
+    expect(
+      menuRepository
+        .getProducts()
+        .filter((product) => product.available)
+        .every((product) => product.price !== undefined),
+    ).toBe(true)
   })
 
   it('maps every product image to a public asset', () => {

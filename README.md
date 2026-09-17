@@ -53,9 +53,24 @@ approved source and verify every referenced image under `public/images/`.
 
 ## Deployment
 
-The `main` branch is connected to Vercel. Pull requests should pass CI before
-merging. A production deployment should be checked at the responsive sizes
-listed in `CONTRIBUTING.md` before it is shared publicly.
+The current production deployment is connected to Vercel. Pull requests should
+pass CI before merging. A production deployment should be checked at the
+responsive sizes listed in `CONTRIBUTING.md` before it is shared publicly.
+
+### Cloudflare Pages
+
+The project is also prepared for a future Cloudflare Pages deployment:
+
+- Framework preset: `Vite`
+- Build command: `bun install --frozen-lockfile && bun run build`
+- Output directory: `dist`
+- Bun version: `1.3.8`
+- Application environment variables: none
+- Functions, Workers and SPA redirects: not required for the current single-page hash navigation
+
+Keep the Vercel configuration until the Cloudflare deployment has been
+validated. After the final domain is confirmed, update the relative values in
+`index.html` and replace `__PRODUCTION_URL__` in `public/sitemap.xml`.
 
 ## License
 
