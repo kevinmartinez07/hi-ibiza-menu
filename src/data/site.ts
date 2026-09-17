@@ -7,6 +7,11 @@ export const siteConfig = {
     clearLabel: 'Limpiar búsqueda',
     emptyMessage: (query: string) => `No encontramos productos con “${query}”.`,
   },
+  productDetails: {
+    eyebrow: 'Detalle del producto',
+    closeLabel: 'Cerrar detalle del producto',
+    openLabel: (name: string) => `Abrir detalles de ${name}`,
+  },
   heroCopy: 'Vive la noche. Disfruta el momento.',
   tagline: 'Donde cada noche tiene su propio brillo.',
   locations: [

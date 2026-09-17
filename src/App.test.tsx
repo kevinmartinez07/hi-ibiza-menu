@@ -1,10 +1,18 @@
-import { cleanup, render, screen, within } from '@testing-library/react'
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { afterEach, describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { App } from '@/App'
 
 afterEach(() => {
   cleanup()
+  vi.restoreAllMocks()
 })
 
 describe('App', () => {
@@ -138,5 +146,54 @@ describe('App', () => {
       'true',
     )
     expect(screen.queryByRole('img', { name: 'Águila' })).not.toBeInTheDocument()
+  })
+
+  it('shows a back-to-top control after scrolling', async () => {
+    const user = userEvent.setup()
+    vi.spyOn(window, 'scrollTo').mockImplementation(() => {})
+    render(<App />)
+
+    expect(
+      screen.queryByRole('button', { name: /volver arriba/i }),
+    ).not.toBeInTheDocument()
+
+    Object.defineProperty(window, 'scrollY', { configurable: true, value: 600 })
+    fireEvent.scroll(window)
+
+    const backToTop = screen.getByRole('button', { name: /volver arriba/i })
+    expect(backToTop).toBeInTheDocument()
+
+    await user.click(backToTop)
+    expect(window.scrollTo).toHaveBeenCalledWith({ top: 0, behavior: 'smooth' })
+  })
+
+  it('opens product details with keyboard activation', async () => {
+    render(<App />)
+
+    const productAction = screen.getByRole('button', {
+      name: 'Abrir detalles de Mojito',
+    })
+
+    productAction.focus()
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    fireEvent.click(productAction)
+
+    expect(screen.getByRole('dialog', { name: /mojito/i })).toBeInTheDocument()
+    expect(
+      screen.getByRole('button', { name: 'Cerrar detalle del producto' }),
+    ).toBeInTheDocument()
+
+    const closeButton = screen.getByRole('button', {
+      name: 'Cerrar detalle del producto',
+    })
+    closeButton.focus()
+    fireEvent.keyDown(closeButton, { key: 'Tab' })
+    expect(document.activeElement).toBe(closeButton)
+
+    fireEvent.click(closeButton)
+    await waitFor(() => {
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
+    })
+    expect(document.activeElement).toBe(productAction)
   })
 })
