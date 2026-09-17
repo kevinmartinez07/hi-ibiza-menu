@@ -1,8 +1,12 @@
 import { siteConfig } from '@/data/site'
 import { Clock3, Instagram, MapPin } from 'lucide-react'
-import { menuCategories } from '@/data/menu'
+import type { MenuCategory } from '@/domain/menu'
 
-export function Footer() {
+type FooterProps = {
+  categories: readonly MenuCategory[]
+}
+
+export function Footer({ categories }: FooterProps) {
   return (
     <footer className='site-footer'>
       <div className='footer-main'>
@@ -26,7 +30,7 @@ export function Footer() {
         <div className='footer-column'>
           <p className='footer-section-title'>Explora la carta</p>
           <nav className='footer-nav' aria-label='Secciones del menú'>
-            {menuCategories.map((category) => (
+            {categories.map((category) => (
               <a href={`#${category.id}`} key={category.id}>
                 {category.name}
               </a>

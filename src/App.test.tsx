@@ -95,6 +95,38 @@ describe('App', () => {
     expect(screen.getByRole('heading', { name: 'Mojito' })).toBeInTheDocument()
   })
 
+  it('matches products without requiring accents', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    await user.type(
+      screen.getByRole('searchbox', { name: /buscar productos/i }),
+      'aguila',
+    )
+
+    expect(screen.getByRole('heading', { name: 'Águila' })).toBeInTheDocument()
+  })
+
+  it('keeps footer links limited to visible categories while searching', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    await user.type(
+      screen.getByRole('searchbox', { name: /buscar productos/i }),
+      'Buchanan',
+    )
+
+    const footerNavigation = screen.getByRole('navigation', {
+      name: 'Secciones del menú',
+    })
+    expect(
+      within(footerNavigation).getByRole('link', { name: 'Licores' }),
+    ).toBeInTheDocument()
+    expect(
+      within(footerNavigation).queryByRole('link', { name: 'Cócteles' }),
+    ).not.toBeInTheDocument()
+  })
+
   it('switches to a reading-friendly menu view', async () => {
     const user = userEvent.setup()
     render(<App />)
