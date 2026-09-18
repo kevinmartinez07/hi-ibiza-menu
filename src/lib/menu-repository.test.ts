@@ -43,9 +43,11 @@ describe('menuRepository', () => {
     expect(liquorIds.indexOf('botella-aguardiente-azul')).toBe(0)
 
     expect(
-      menuRepository.getProducts().filter((product) =>
-        ['litro-aguardiente-azul', 'litro-aguardiente-rojo'].includes(product.id),
-      ),
+      menuRepository
+        .getProducts()
+        .filter((product) =>
+          ['litro-aguardiente-azul', 'litro-aguardiente-rojo'].includes(product.id),
+        ),
     ).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
