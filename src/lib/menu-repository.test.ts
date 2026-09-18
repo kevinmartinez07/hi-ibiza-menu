@@ -17,7 +17,7 @@ describe('menuRepository', () => {
       menuRepository.getCategories().map((category) => category.id),
     )
 
-    expect(menuRepository.getProducts()).toHaveLength(93)
+    expect(menuRepository.getProducts()).toHaveLength(95)
     expect(
       menuRepository
         .getProducts()
@@ -41,6 +41,27 @@ describe('menuRepository', () => {
       liquorIds.indexOf('media-buchanans-deluxe') - 1,
     )
     expect(liquorIds.indexOf('botella-aguardiente-azul')).toBe(0)
+
+    expect(
+      menuRepository
+        .getProducts()
+        .filter((product) =>
+          ['litro-aguardiente-azul', 'litro-aguardiente-rojo'].includes(product.id),
+        ),
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: 'litro-aguardiente-azul',
+          price: 140000,
+          image: '/images/products/litro-aguardiente-azul.webp',
+        }),
+        expect.objectContaining({
+          id: 'litro-aguardiente-rojo',
+          price: 140000,
+          image: '/images/products/litro-aguardiente-rojo.webp',
+        }),
+      ]),
+    )
   })
 
   it('allows pending products without a price', () => {

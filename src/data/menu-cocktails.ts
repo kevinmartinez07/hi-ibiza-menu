@@ -64,7 +64,7 @@ export const cocktailProducts: MenuProduct[] = [
     id: 'granizado-8-onzas',
     categoryId: 'cocktails',
     name: 'Granizado 8 Onzas',
-    price: 8000,
+    price: 10000,
     available: true,
   },
   {
