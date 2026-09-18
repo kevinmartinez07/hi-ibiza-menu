@@ -2,6 +2,22 @@ import type { MenuProduct } from '@/domain/menu'
 
 export const liquorServingProducts: MenuProduct[] = [
   {
+    id: 'litro-aguardiente-azul',
+    categoryId: 'licores',
+    name: 'Litro Aguardiente Azul',
+    price: 140000,
+    image: '/images/products/litro-aguardiente-azul.webp',
+    available: true,
+  },
+  {
+    id: 'litro-aguardiente-rojo',
+    categoryId: 'licores',
+    name: 'Litro Aguardiente Rojo',
+    price: 140000,
+    image: '/images/products/litro-aguardiente-rojo.webp',
+    available: true,
+  },
+  {
     id: 'litro-aguardiente-verde',
     categoryId: 'licores',
     name: 'Litro Aguardiente Verde',
